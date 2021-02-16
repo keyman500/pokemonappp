@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>Poke Dextr</title>
+    <style> .poke{
+      text-align: center;
+      //background-color : green
+       width: 100px;
+	height: 100px;
+	background-color: ;
+	
+	position: absolute;
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+  	
+	margin: auto;
+    }
+            #listing { 
+                margin:4px, 4px; 
+                padding:4px; 
+                width: 200px; 
+                height: 600px; 
+                overflow-x: hidden; 
+                overflow-x: auto; 
+                text-align:left; 
+            } 
+        </style> 
+  </head>
+
+  <body>
+   <nav>Poke Dextr <a href="index.html" style="float: right;"> Listing <a/></nav>
+     <main> 
+  <div id="listing" class="verticalS">
+  </div> 
+  <div id="display" class="poke"></div >
+     </main>
+     
+    <script>
+
+        async function getPokemon(pokemonName){
+          //given a pokemon name performs an ajax requests querying the pokemon's data and pass it to displayPokemon()
+             try{
+             let response = await fetch
+           (`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+        let result= await response.json();
+        displayPokemon(result);
+        }catch(e){
+          console.log("failed here bro")
+          console.log(e);
+        }
+        }
+        function displayListing(pokeList){
+            let rez = document.querySelector('#listing');
+           for(poke of pokeList.results){
+            rez.innerHTML += `
+            <a href ="#"  id="${poke.name}" class="collection-item" onclick=getPokemon("${poke.name}") > ${poke.name} </a>
+            <br/>
+            `;
+           }
+         
+        }
+      
+        function displayPokemon(pokemon){
+            //poke.name
+        //poke.height , poke.id , poke.weight,
+  
+        document.querySelector('#display').innerHTML = `<img src="${pokemon.sprites.front_default}"/></br> ${pokemon.name}`;
+          
+        }
+
+       async function getLising(){
+          //performs an ajax request to the spcified url to get pokemon data then pass it to displayListing()
+          try{let response = await fetch("https://pokeapi.co/api/v2/pokemon/?limit=50&offset=50");
+        let result= await response.json();
+        displayListing(result);
+        
+        }catch(e){
+          console.log(e);
+        }
+    
+        }
+
+       
+
+  
+      getLising();
+ 
+
+    </script>
+       
+  </body>
+</html>
